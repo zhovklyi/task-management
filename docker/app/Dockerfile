@@ -13,6 +13,9 @@ RUN npm install
 # Copy source code
 COPY . .
 
+# Build the project to ensure Tailwind CSS is properly compiled
+RUN npm run build
+
 # Expose port 3000 (to match docker-compose)
 EXPOSE 3000
 
