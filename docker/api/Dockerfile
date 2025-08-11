@@ -25,6 +25,9 @@ COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 # Enable Apache mod_rewrite
 RUN a2enmod rewrite
 
+# Configure Apache for Laravel - Set DocumentRoot to public directory
+RUN sed -i 's|DocumentRoot /var/www/html|DocumentRoot /var/www/html/public|g' /etc/apache2/sites-available/000-default.conf
+
 # Configure Apache for Laravel
 RUN echo '<Directory /var/www/html/public>\n\
     AllowOverride All\n\
