@@ -1,4 +1,4 @@
-# Development stage for Vue.js
+# Development stage for React + TypeScript
 FROM node:20-alpine
 
 # Set working directory
@@ -13,8 +13,8 @@ RUN npm install
 # Copy source code
 COPY . .
 
-# Expose port 5173 (Vite dev server default)
-EXPOSE 5173
+# Expose port 3000 (to match docker-compose)
+EXPOSE 3000
 
-# Start development server
-CMD ["npm", "run", "dev"]
+# Start development server on port 3000
+CMD ["npm", "run", "dev", "--", "--host", "0.0.0.0", "--port", "3000"]

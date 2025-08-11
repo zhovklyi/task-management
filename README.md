@@ -1,13 +1,13 @@
 # Task Management System
 
-A full-stack task management application built with Laravel 12 API and Vue 3 frontend.
+A full-stack task management application built with Laravel 12 API and React + TypeScript frontend.
 
 ## Project Structure
 
 ```
 task-management/
 ├── api/                 # Laravel 12 API Backend
-├── app/                 # Vue 3 Frontend Application
+├── app/                 # React + TypeScript Frontend Application
 ├── docker/              # Docker configuration files
 │   ├── api/            # API Dockerfile
 │   ├── app/            # App Dockerfile
@@ -18,7 +18,7 @@ task-management/
 ## Services
 
 - **API**: Laravel 12 REST API (Port 8000)
-- **App**: Vue 3 SPA Frontend (Port 3000)
+- **App**: React + TypeScript SPA Frontend (Port 3000)
 - **Database**: MySQL (Port 3306)
 
 ## Quick Start
@@ -37,16 +37,15 @@ task-management/
 ## Development
 
 - **API**: Laravel 12 with PHP 8.2
-- **Frontend**: Vue 3 with TypeScript, Router, Pinia, ESLint, and Prettier
+- **Frontend**: React 18 with TypeScript, Vite, ESLint, and Prettier
 - **Database**: MySQL with persistent storage
 - **Containerization**: Multi-stage Docker builds for production readiness
 
 ## Features
 
 - Modern Laravel 12 API architecture
-- Vue 3 composition API with TypeScript
-- State management with Pinia
-- Client-side routing with Vue Router
+- React 18 with TypeScript and modern hooks
+- Fast development with Vite
 - Code quality tools (ESLint, Prettier)
 - Production-ready Docker configuration
 - Hot-reload development environment
