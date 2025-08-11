@@ -47,6 +47,8 @@ services:
     environment:
       MYSQL_DATABASE: task_management
       MYSQL_ROOT_PASSWORD: secret
+    volumes:
+      - ./mysql-data:/var/lib/mysql
     networks:
       - app-network
 
