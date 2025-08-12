@@ -20,5 +20,5 @@ export const routes = Object.entries(pages)
 
 export const allRoutes = [
   ...routes,
-  { path: '/dashboard', element: (pages['../pages/Dashboard.tsx'] as PageComponent).default }
+  { path: '/dashboard', element: (pages['../pages/dashboard.tsx'] as PageComponent).default }
 ]
