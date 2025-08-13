@@ -1,55 +1,101 @@
-import { useState } from "react"
+import { useState, useEffect } from "react"
+import { useNavigate } from "react-router-dom"
 import AuthLayout from "@/layouts/auth-layout"
 import FormGroup from "@/components/FormGroup"
+import { useRegisterMutation } from "@/hooks/queries/auth"
+import useUserStore from "@/store/user-store"
+import { setAuthorization } from "@/apis/config"
+
+interface FormData {
+  name: string
+  email: string
+  password: string
+  passwordConfirmation: string
+}
+
+interface ValidationErrors {
+  [key: string]: string
+}
 
 function Register() {
-  const [formData, setFormData] = useState({
+  const navigate = useNavigate()
+  const { setUser } = useUserStore()
+  const registerMutation = useRegisterMutation()
+
+  const [formData, setFormData] = useState<FormData>({
     name: '',
     email: '',
     password: '',
     passwordConfirmation: '',
   })
-  const [isLoading, setIsLoading] = useState(false)
-  const [errors, setErrors] = useState<{[key: string]: string}>({})
+  const [errors, setErrors] = useState<ValidationErrors>({})
+
+  const validateForm = (data: FormData): ValidationErrors => {
+    const newErrors: ValidationErrors = {}
+
+    if (!data.name.trim()) {
+      newErrors.name = "Full name is required"
+    }
+
+    if (!data.email.trim()) {
+      newErrors.email = "Email is required"
+    } else if (!/\S+@\S+\.\S+/.test(data.email)) {
+      newErrors.email = "Please enter a valid email address"
+    }
+
+    if (!data.password) {
+      newErrors.password = "Password is required"
+    } else if (data.password.length < 6) {
+      newErrors.password = "Password must be at least 6 characters"
+    }
+
+    if (!data.passwordConfirmation) {
+      newErrors.passwordConfirmation = "Please confirm your password"
+    } else if (data.password !== data.passwordConfirmation) {
+      newErrors.passwordConfirmation = "Passwords do not match"
+    }
+
+    return newErrors
+  }
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    setIsLoading(true)
+
+    const validationErrors = validateForm(formData)
+    if (Object.keys(validationErrors).length > 0) {
+      setErrors(validationErrors)
+      return
+    }
+
     setErrors({})
 
-    // Basic validation
-    if (formData.password !== formData.passwordConfirmation) {
-      setErrors({ passwordConfirmation: "Passwords do not match" })
-      setIsLoading(false)
-      return
-    }
-
-    if (formData.password.length < 6) {
-      setErrors({ password: "Password must be at least 6 characters" })
-      setIsLoading(false)
-      return
-    }
-
-    // Simulate API call
-    setTimeout(() => {
-      console.log("Register attempt:", formData)
-      setIsLoading(false)
-    }, 1000)
+    registerMutation.mutate({
+      name: formData.name,
+      email: formData.email,
+      password: formData.password,
+      password_confirmation: formData.passwordConfirmation
+    })
   }
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value
-    })
-    // Clear error when user starts typing
+    setFormData({...formData, [e.target.name]: e.target.value})
+
     if (errors[e.target.name]) {
-      setErrors({
-        ...errors,
-        [e.target.name]: ""
-      })
+      setErrors({...errors, [e.target.name]: ""})
     }
   }
+
+  // Handle successful registration
+  useEffect(() => {
+    if (registerMutation.isSuccess && registerMutation.data) {
+      setUser(registerMutation.data.data.user)
+      setAuthorization(registerMutation.data.data.token)
+
+      navigate('/')
+    }
+  }, [registerMutation.isSuccess, registerMutation.data, setUser, navigate])
+
+  const isLoading = registerMutation.isPending
 
   return (
     <AuthLayout>
@@ -70,6 +116,7 @@ function Register() {
                 onChange={handleInputChange}
                 placeholder="Enter your full name"
                 required
+                {...(errors.name && { error: errors.name })}
               />
 
               <FormGroup
@@ -80,6 +127,7 @@ function Register() {
                 onChange={handleInputChange}
                 placeholder="Enter your email"
                 required
+                {...(errors.email && { error: errors.email })}
               />
 
               <FormGroup
@@ -90,7 +138,7 @@ function Register() {
                 onChange={handleInputChange}
                 placeholder="Create a password"
                 required
-                error={errors.password}
+                {...(errors.password && { error: errors.password })}
               />
 
               <FormGroup
@@ -101,7 +149,7 @@ function Register() {
                 onChange={handleInputChange}
                 placeholder="Confirm your password"
                 required
-                error={errors.passwordConfirmation}
+                {...(errors.passwordConfirmation && { error: errors.passwordConfirmation })}
               />
 
               <button
@@ -136,3 +184,4 @@ function Register() {
 }
 
 export default Register
+

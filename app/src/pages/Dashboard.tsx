@@ -1,6 +1,23 @@
 import MainLayout from "../layouts/main-layout"
+import useUserStore from "@/store/user-store"
 
 const Dashboard = () => {
+  const { user } = useUserStore()
+
+  // Safety check - ensure user has required data
+  if (!user?.name || !user?.email) {
+    return (
+      <MainLayout>
+        <div className="flex items-center justify-center min-h-64">
+          <div className="text-center">
+            <div className="w-16 h-16 border-4 border-blue-600 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
+            <p className="text-gray-600">Loading user data...</p>
+          </div>
+        </div>
+      </MainLayout>
+    )
+  }
+
   const stats = [
     { title: "Total Tasks", value: "24", change: "+12%", changeType: "increase", icon: "📋" },
     { title: "Completed", value: "18", change: "+8%", changeType: "increase", icon: "✅" },
@@ -44,7 +61,9 @@ const Dashboard = () => {
     <MainLayout>
       <div className="space-y-6">
         <div className="bg-white rounded-lg shadow-sm p-6 border border-gray-200">
-          <h1 className="text-3xl font-bold text-gray-900 mb-2">Welcome back, John! 👋</h1>
+          <h1 className="text-3xl font-bold text-gray-900 mb-2">
+            Welcome back, {user?.name}! 👋
+          </h1>
           <p className="text-gray-600">Here's what's happening with your tasks today.</p>
         </div>
 
