@@ -19,37 +19,26 @@ class AuthController extends Controller
     /**
      * Register a new user
      */
-    public function register(RegisterData $data): ApiResponseData
+    public function register(RegisterData $data): AuthResponseData
     {
         $result = $this->authService->register($data->toArray());
 
-        $responseData = new AuthResponseData(
+        return new AuthResponseData(
             user: UserData::from($result['user']),
             token: $result['token']
-        );
-
-        return ApiResponseData::success(
-            data: $responseData,
-            message: 'User registered successfully',
-            code: 201
         );
     }
 
     /**
      * Login user and create token
      */
-    public function login(LoginData $data): ApiResponseData
+    public function login(LoginData $data): AuthResponseData
     {
         $result = $this->authService->login($data->toArray());
 
-        $responseData = new AuthResponseData(
+        return new AuthResponseData(
             user: UserData::from($result['user']),
             token: $result['token']
-        );
-
-        return ApiResponseData::success(
-            data: $responseData,
-            message: 'Login successful'
         );
     }
 
@@ -68,13 +57,8 @@ class AuthController extends Controller
     /**
      * Get authenticated user
      */
-    public function user(Request $request): ApiResponseData
+    public function user(Request $request): UserData
     {
-        $userData = UserData::from($request->user());
-
-        return ApiResponseData::success(
-            data: $userData,
-            message: 'User retrieved successfully'
-        );
+        return UserData::from($request->user());
     }
 }
