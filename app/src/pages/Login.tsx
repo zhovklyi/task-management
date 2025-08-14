@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react"
+import React, { useState } from "react"
 import AuthLayout from "@/layouts/auth-layout"
 import FormGroup from "@/components/FormGroup"
 import type { FC } from "react"
