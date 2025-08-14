@@ -2,9 +2,10 @@ import { useState, useEffect } from "react"
 import { useNavigate } from "react-router-dom"
 import AuthLayout from "@/layouts/auth-layout"
 import FormGroup from "@/components/FormGroup"
-import { useRegisterMutation } from "@/hooks/queries/auth"
 import useUserStore from "@/store/user-store"
+import { useRegisterMutation } from "@/hooks/queries/auth"
 import { setAuthorization } from "@/apis/config"
+import type { FC } from "react"
 
 interface FormData {
   name: string
@@ -17,7 +18,7 @@ interface ValidationErrors {
   [key: string]: string
 }
 
-function Register() {
+const Register: FC = (): React.ReactElement => {
   const navigate = useNavigate()
   const { setUser } = useUserStore()
   const registerMutation = useRegisterMutation()
@@ -58,7 +59,7 @@ function Register() {
     return newErrors
   }
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent): Promise<void> => {
     e.preventDefault()
 
     const validationErrors = validateForm(formData)
@@ -77,7 +78,7 @@ function Register() {
     })
   }
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
     setFormData({...formData, [e.target.name]: e.target.value})
 
     if (errors[e.target.name]) {
@@ -88,8 +89,8 @@ function Register() {
   // Handle successful registration
   useEffect(() => {
     if (registerMutation.isSuccess && registerMutation.data) {
-      setUser(registerMutation.data.data.user)
-      setAuthorization(registerMutation.data.data.token)
+      setUser(registerMutation.data.user)
+      setAuthorization(registerMutation.data.token)
 
       navigate('/')
     }

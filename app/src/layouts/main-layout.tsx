@@ -8,7 +8,7 @@ interface MainLayoutProps {
   children: React.ReactNode
 }
 
-const MainLayout : React.FC<MainLayoutProps> = ({ children }) => {
+const MainLayout: React.FC<MainLayoutProps> = ({ children }): React.ReactElement => {
   const navigate = useNavigate()
   const { user, isAuthenticated, setUser, logout } = useUserStore()
 
@@ -22,20 +22,19 @@ const MainLayout : React.FC<MainLayoutProps> = ({ children }) => {
   const [isProfileOpen, setIsProfileOpen] = useState(false)
 
   useEffect(() => {
-    if (isAuthSuccess && authData.data) {
-      setUser(authData.data)
+    if (isAuthSuccess && authData) {
+      setUser(authData)
     }
-  }, [authData, isAuthSuccess])
+  }, [authData, isAuthSuccess, setUser])
 
   useEffect(() => {
     if (isAuthError) {
       logout()
       navigate('/login')
     }
-  },
-  [isAuthError])
+  }, [isAuthError, logout, navigate])
 
-  const handleLogout = () => {
+  const handleLogout = (): void => {
     logout()
     setIsProfileOpen(false)
     navigate('/login')
@@ -57,7 +56,7 @@ const MainLayout : React.FC<MainLayoutProps> = ({ children }) => {
   }
 
   if (!isAuthenticated) {
-    return null
+    return <></>
   }
 
   return (

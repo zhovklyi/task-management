@@ -1,8 +1,9 @@
 import { useState } from "react"
 import AuthLayout from "@/layouts/auth-layout"
 import FormGroup from "@/components/FormGroup"
+import type { FC } from "react"
 
-function Login() {
+const Login: FC = (): React.ReactElement => {
   const [formData, setFormData] = useState({
     email: "",
     password: ""
@@ -10,7 +11,7 @@ function Login() {
 
   const [isLoading, setIsLoading] = useState(false)
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent): Promise<void> => {
     e.preventDefault()
     setIsLoading(true)
 
@@ -21,7 +22,7 @@ function Login() {
     }, 1000)
   }
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
     setFormData({
       ...formData,
       [e.target.name]: e.target.value

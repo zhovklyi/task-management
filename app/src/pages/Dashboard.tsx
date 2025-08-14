@@ -1,7 +1,8 @@
 import MainLayout from "../layouts/main-layout"
 import useUserStore from "@/store/user-store"
+import type { FC } from "react"
 
-const Dashboard = () => {
+const Dashboard: FC = (): React.ReactElement => {
   const { user } = useUserStore()
 
   // Safety check - ensure user has required data
@@ -39,7 +40,7 @@ const Dashboard = () => {
     { title: "Reports", icon: "📊", action: "reports", color: "bg-orange-500 hover:bg-orange-600" }
   ]
 
-  const getStatusColor = (status: string) => {
+  const getStatusColor = (status: string): string => {
     switch (status) {
       case 'completed': return 'text-green-600 bg-green-100'
       case 'in-progress': return 'text-blue-600 bg-blue-100'
@@ -48,7 +49,7 @@ const Dashboard = () => {
     }
   }
 
-  const getPriorityColor = (priority: string) => {
+  const getPriorityColor = (priority: string): string => {
     switch (priority) {
       case 'high': return 'text-red-600 bg-red-100'
       case 'medium': return 'text-yellow-600 bg-yellow-100'
