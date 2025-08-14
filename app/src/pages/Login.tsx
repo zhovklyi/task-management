@@ -1,25 +1,29 @@
-import { useState } from "react"
+import React, { useEffect, useState } from "react"
 import AuthLayout from "@/layouts/auth-layout"
 import FormGroup from "@/components/FormGroup"
 import type { FC } from "react"
+import { useLoginMutation } from "@/hooks/queries/auth"
+import useUserStore from "@/store/user-store"
+import { useNavigate } from "react-router-dom"
+import { setAuthorization } from "@/apis/config"
 
 const Login: FC = (): React.ReactElement => {
+  const navigate = useNavigate()
+  const { setUser } = useUserStore()
+  const loginMutation = useLoginMutation()
+
   const [formData, setFormData] = useState({
     email: "",
     password: ""
   })
 
-  const [isLoading, setIsLoading] = useState(false)
-
   const handleSubmit = async (e: React.FormEvent): Promise<void> => {
     e.preventDefault()
-    setIsLoading(true)
 
-    // Simulate API call
-    setTimeout(() => {
-      console.log("Login attempt:", formData)
-      setIsLoading(false)
-    }, 1000)
+    loginMutation.mutate({
+      email: formData.email,
+      password: formData.password,
+    })
   }
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
@@ -28,6 +32,17 @@ const Login: FC = (): React.ReactElement => {
       [e.target.name]: e.target.value
     })
   }
+
+  useEffect(() => {
+    if (loginMutation.isSuccess && loginMutation.data) {
+      setUser(loginMutation.data.user)
+      setAuthorization(loginMutation.data.token)
+
+      navigate('/')
+    }
+  }, [loginMutation.isSuccess, loginMutation.data, setUser, navigate])
+
+  const isLoading = loginMutation.isPending
 
   return (
     <AuthLayout>
