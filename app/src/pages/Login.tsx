@@ -23,6 +23,12 @@ const Login: FC = (): React.ReactElement => {
     loginMutation.mutate({
       email: formData.email,
       password: formData.password,
+    }, {
+      onSuccess: (loginData) => {
+        setUser(loginData.user)
+        setAuthorization(loginData.token)
+        navigate('/')
+      }
     })
   }
 
@@ -32,17 +38,6 @@ const Login: FC = (): React.ReactElement => {
       [e.target.name]: e.target.value
     })
   }
-
-  useEffect(() => {
-    if (loginMutation.isSuccess && loginMutation.data) {
-      setUser(loginMutation.data.user)
-      setAuthorization(loginMutation.data.token)
-
-      navigate('/')
-    }
-  }, [loginMutation.isSuccess, loginMutation.data, setUser, navigate])
-
-  const isLoading = loginMutation.isPending
 
   return (
     <AuthLayout>
@@ -102,10 +97,10 @@ const Login: FC = (): React.ReactElement => {
 
               <button
                 type="submit"
-                disabled={isLoading}
+                disabled={loginMutation.isPending}
                 className="w-full bg-blue-600 text-white py-3 px-4 rounded-lg font-medium hover:bg-blue-700 focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
               >
-                {isLoading ? (
+                {loginMutation.isPending ? (
                   <div className="flex items-center justify-center space-x-2">
                     <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
                     <span>Signing in...</span>

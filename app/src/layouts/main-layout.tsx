@@ -2,7 +2,7 @@ import type React from "react"
 import { useState, useEffect } from "react"
 import { useNavigate } from "react-router-dom"
 import useUserStore from "@/store/user-store"
-import { useUserQuery } from "@/hooks/queries/auth"
+import { useUserQuery, useLogoutMutation } from "@/hooks/queries/auth"
 
 interface MainLayoutProps {
   children: React.ReactNode
@@ -10,7 +10,7 @@ interface MainLayoutProps {
 
 const MainLayout: React.FC<MainLayoutProps> = ({ children }): React.ReactElement => {
   const navigate = useNavigate()
-  const { user, isAuthenticated, setUser, logout } = useUserStore()
+  const { user, isAuthenticated, setUser, logout: clearUser } = useUserStore()
 
   const {
     data: authData,
@@ -18,6 +18,8 @@ const MainLayout: React.FC<MainLayoutProps> = ({ children }): React.ReactElement
     isSuccess: isAuthSuccess,
     isError: isAuthError
   } = useUserQuery()
+
+  const logoutMutation = useLogoutMutation()
 
   const [isProfileOpen, setIsProfileOpen] = useState(false)
 
@@ -29,15 +31,24 @@ const MainLayout: React.FC<MainLayoutProps> = ({ children }): React.ReactElement
 
   useEffect(() => {
     if (isAuthError) {
-      logout()
+      clearUser()
       navigate('/login')
     }
-  }, [isAuthError, logout, navigate])
+  }, [isAuthError, clearUser, navigate])
 
   const handleLogout = (): void => {
-    logout()
-    setIsProfileOpen(false)
-    navigate('/login')
+    logoutMutation.mutate(undefined, {
+      onSuccess: () => {
+        clearUser()
+        setIsProfileOpen(false)
+        navigate('/login')
+      },
+      onError: () => {
+        clearUser()
+        setIsProfileOpen(false)
+        navigate('/login')
+      }
+    })
   }
 
   if (authIsLoading) {
@@ -100,9 +111,17 @@ const MainLayout: React.FC<MainLayoutProps> = ({ children }): React.ReactElement
 
                       <button
                         onClick={handleLogout}
-                        className="block w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-gray-100 transition-colors"
+                        disabled={logoutMutation.isPending}
+                        className="block w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-gray-100 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                       >
-                        Logout
+                        {logoutMutation.isPending ? (
+                          <div className="flex items-center space-x-2">
+                            <div className="w-3 h-3 border border-red-600 border-t-transparent rounded-full animate-spin"></div>
+                            <span>Logging out...</span>
+                          </div>
+                        ) : (
+                          "Logout"
+                        )}
                       </button>
                     </div>
                   )}

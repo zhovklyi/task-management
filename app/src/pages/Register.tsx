@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react"
+import { useState } from "react"
 import { useNavigate } from "react-router-dom"
 import AuthLayout from "@/layouts/auth-layout"
 import FormGroup from "@/components/FormGroup"
@@ -75,6 +75,12 @@ const Register: FC = (): React.ReactElement => {
       email: formData.email,
       password: formData.password,
       password_confirmation: formData.passwordConfirmation
+    }, {
+      onSuccess: (registrationData) => {
+        setUser(registrationData.user)
+        setAuthorization(registrationData.token)
+        navigate('/')
+      }
     })
   }
 
@@ -85,18 +91,6 @@ const Register: FC = (): React.ReactElement => {
       setErrors({...errors, [e.target.name]: ""})
     }
   }
-
-  // Handle successful registration
-  useEffect(() => {
-    if (registerMutation.isSuccess && registerMutation.data) {
-      setUser(registerMutation.data.user)
-      setAuthorization(registerMutation.data.token)
-
-      navigate('/')
-    }
-  }, [registerMutation.isSuccess, registerMutation.data, setUser, navigate])
-
-  const isLoading = registerMutation.isPending
 
   return (
     <AuthLayout>
@@ -155,10 +149,10 @@ const Register: FC = (): React.ReactElement => {
 
               <button
                 type="submit"
-                disabled={isLoading}
+                disabled={registerMutation.isPending}
                 className="w-full bg-blue-600 text-white py-3 px-4 rounded-lg font-medium hover:bg-blue-700 focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
               >
-                {isLoading ? (
+                {registerMutation.isPending ? (
                   <div className="flex items-center justify-center space-x-2">
                     <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
                     <span>Creating account...</span>

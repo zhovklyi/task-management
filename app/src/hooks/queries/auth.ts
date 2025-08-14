@@ -1,4 +1,4 @@
-import { register, login, getUser } from "@/apis/auth";
+import { register, login, getUser, logout } from "@/apis/auth";
 import type { RegisterData, LoginData, AuthResponse } from "@/types/auth";
 import type { User } from "@/types/user";
 import { useMutation, useQuery, type UseMutationResult, type UseQueryResult } from "@tanstack/react-query";
@@ -12,6 +12,12 @@ export function useRegisterMutation(): UseMutationResult<AuthResponse, Error, Re
 export function useLoginMutation(): UseMutationResult<AuthResponse, Error, LoginData, unknown> {
   return useMutation({
     mutationFn: async (loginData: LoginData) => await login(loginData),
+  })
+}
+
+export function useLogoutMutation(): UseMutationResult<void, Error, void, unknown> {
+  return useMutation({
+    mutationFn: async () => await logout(),
   })
 }
 
