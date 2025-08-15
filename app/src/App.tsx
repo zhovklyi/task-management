@@ -1,6 +1,7 @@
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom'
 import { allRoutes } from './utils/routeMapper'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
+import { Toaster } from 'react-hot-toast'
 import type { FC } from 'react'
 
 const queryClient = new QueryClient()
@@ -19,6 +20,7 @@ const App: FC = (): React.ReactElement => {
           ))}
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
+        <Toaster />
       </Router>
     </QueryClientProvider>
   )

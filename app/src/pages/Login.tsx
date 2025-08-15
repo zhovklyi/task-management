@@ -6,6 +6,7 @@ import { useLoginMutation } from "@/hooks/queries/auth"
 import useUserStore from "@/store/user-store"
 import { useNavigate } from "react-router-dom"
 import { setAuthorization } from "@/apis/config"
+import toast from "react-hot-toast"
 
 const Login: FC = (): React.ReactElement => {
   const navigate = useNavigate()
@@ -25,9 +26,18 @@ const Login: FC = (): React.ReactElement => {
       password: formData.password,
     }, {
       onSuccess: (loginData) => {
+        toast.success('Logged in successfully')
         setUser(loginData.user)
         setAuthorization(loginData.token)
         navigate('/')
+      },
+      onError: (error) => {
+        if (error.message) {
+          toast.error(error.message)
+          return
+        }
+
+        console.error(error)
       }
     })
   }

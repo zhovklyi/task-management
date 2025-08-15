@@ -6,6 +6,7 @@ import useUserStore from "@/store/user-store"
 import { useRegisterMutation } from "@/hooks/queries/auth"
 import { setAuthorization } from "@/apis/config"
 import type { FC } from "react"
+import toast from "react-hot-toast"
 
 interface FormData {
   name: string
@@ -77,9 +78,18 @@ const Register: FC = (): React.ReactElement => {
       password_confirmation: formData.passwordConfirmation
     }, {
       onSuccess: (registrationData) => {
+        toast.success('Successfully registered')
         setUser(registrationData.user)
         setAuthorization(registrationData.token)
         navigate('/')
+      },
+      onError: (error) => {
+        if (error.message) {
+          toast.error(error.message)
+          return
+        }
+
+        console.error(error)
       }
     })
   }

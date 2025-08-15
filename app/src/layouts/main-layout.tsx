@@ -3,6 +3,7 @@ import { useState, useEffect } from "react"
 import { useNavigate } from "react-router-dom"
 import useUserStore from "@/store/user-store"
 import { useUserQuery, useLogoutMutation } from "@/hooks/queries/auth"
+import toast from "react-hot-toast"
 
 interface MainLayoutProps {
   children: React.ReactNode
@@ -39,6 +40,7 @@ const MainLayout: React.FC<MainLayoutProps> = ({ children }): React.ReactElement
   const handleLogout = (): void => {
     logoutMutation.mutate(undefined, {
       onSuccess: () => {
+        toast.success('Logged out successfully')
         clearUser()
         setIsProfileOpen(false)
         navigate('/login')
