@@ -1,7 +1,7 @@
 import { useState } from "react"
 import { useNavigate } from "react-router-dom"
 import AuthLayout from "@/layouts/auth-layout"
-import FormGroup from "@/components/FormGroup"
+import FormGroup from "@/components/forms/FormGroup"
 import useUserStore from "@/store/user-store"
 import { useRegisterMutation } from "@/hooks/queries/auth"
 import { setAuthorization } from "@/apis/config"

@@ -1,6 +1,6 @@
 import React, { useState } from "react"
 import AuthLayout from "@/layouts/auth-layout"
-import FormGroup from "@/components/FormGroup"
+import FormGroup from "@/components/forms/FormGroup"
 import type { FC } from "react"
 import { useLoginMutation } from "@/hooks/queries/auth"
 import useUserStore from "@/store/user-store"
