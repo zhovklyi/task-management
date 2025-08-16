@@ -13,16 +13,21 @@ class ProjectRepository
         private Project $model
     ) {}
 
+    public function findOrFail(int $id): Project
+    {
+        return $this->model->findOrFail($id);
+    }
+
     public function getProjectsByUser(User $user): Collection
     {
         return $this->model->where('user_id', $user->id)->get();
     }
 
-    public function create(ProjectFormData $data): Project
+    public function create(User $user, ProjectFormData $data): Project
     {
         return $this->model->create([
             'name' => $data->name,
-            'user_id' => $data->user->id,
+            'user_id' => $user->id,
         ]);
     }
 

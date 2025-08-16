@@ -37,15 +37,17 @@ class User extends Authenticatable
         ];
     }
 
-    /** @return HasMany<Project> */
+    /** @return HasMany<Project, User> */
     public function projects(): HasMany
     {
+        /** @var HasMany<Project, User> */
         return $this->hasMany(Project::class);
     }
 
-    /** @return HasManyThrough<Task> */
+    /** @return HasManyThrough<Task, Project, User> */
     public function tasks(): HasManyThrough
     {
+        /** @var HasManyThrough<Task, Project, User> */
         return $this->hasManyThrough(Task::class, Project::class);
     }
 }

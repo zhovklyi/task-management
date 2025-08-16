@@ -27,7 +27,10 @@ class TaskController extends Controller
 
     public function store(Request $request, TaskFormData $taskFormData): ApiResponseData
     {
-        $task = $this->taskService->createTask($taskFormData, $request->user());
+        $task = $this->taskService->createTask(
+            user: $request->user(),
+            formData: $taskFormData,
+        );
 
         return ApiResponseData::success(
             data: TaskData::from($task),

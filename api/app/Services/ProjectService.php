@@ -21,16 +21,19 @@ class ProjectService
         return $this->projectRepository->getProjectsByUser($requestData->user);
     }
 
-    public function createProject(ProjectFormData $projectFormData): Project
+    public function createProject(User $user, ProjectFormData $formData): Project
     {
-        return $this->projectRepository->create($projectFormData);
+        return $this->projectRepository->create($user, $formData);
     }
 
-    public function updateProject(Project $project, ProjectFormData $projectFormData): Project
-    {
-        $this->checkProjectOwnership($project, $projectFormData->user);
+    public function updateProject(
+        User $user,
+        Project $project,
+        ProjectFormData $formData
+    ): Project {
+        $this->checkProjectOwnership($project, $user);
 
-        return $this->projectRepository->update($project, $projectFormData);
+        return $this->projectRepository->update($project, $formData);
     }
 
     public function deleteProject(Project $project, User $user): bool

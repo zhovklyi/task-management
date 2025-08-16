@@ -2,15 +2,11 @@
 
 namespace App\Data\Project;
 
-use App\Models\User;
-use Spatie\LaravelData\Attributes\FromAuthenticatedUser;
 use Spatie\LaravelData\Data;
 
 class ProjectFormData extends Data
 {
     public function __construct(
-        #[FromAuthenticatedUser()]
-        public User $user,
         public string $name,
     ) {}
 
@@ -25,6 +21,7 @@ class ProjectFormData extends Data
     {
         return [
             'name' => 'Name is required',
+            'name.string' => 'Name must be a valid string',
             'name.max' => 'Name cannot exceed 255 characters',
         ];
     }

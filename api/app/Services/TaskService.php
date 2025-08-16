@@ -6,7 +6,7 @@ use App\Data\Task\TaskFormData;
 use App\Data\Task\TasksRequestData;
 use App\Models\Task;
 use App\Models\User;
-use App\Models\Project;
+use App\Repositories\ProjectRepository;
 use App\Repositories\TaskRepository;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Database\Eloquent\Collection;
@@ -14,6 +14,7 @@ use Illuminate\Database\Eloquent\Collection;
 class TaskService
 {
     public function __construct(
+        private ProjectRepository $projectRepository,
         private TaskRepository $taskRepository,
     ) {}
 
@@ -22,22 +23,22 @@ class TaskService
         return $this->taskRepository->getTasksByUser($requestData->user);
     }
 
-    public function createTask(TaskFormData $taskData, User $user): Task
+    public function createTask(User $user, TaskFormData $formData): Task
     {
-        $project = Project::findOrFail($taskData->project_id);
+        $project = $this->projectRepository->findOrFail($formData->project_id);
 
         if ($project->user_id !== $user->id) {
             throw new AuthorizationException;
         }
 
-        return $this->taskRepository->create($taskData);
+        return $this->taskRepository->create($formData);
     }
 
-    public function updateTask(Task $task, TaskFormData $taskFormData, User $user): Task
+    public function updateTask(Task $task, TaskFormData $formData, User $user): Task
     {
         $this->checkTaskOwnership($task, $user);
 
-        return $this->taskRepository->update($task, $taskFormData);
+        return $this->taskRepository->update($task, $formData);
     }
 
     public function getTask(Task $task, User $user): Task

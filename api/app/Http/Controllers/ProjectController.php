@@ -25,18 +25,28 @@ class ProjectController extends Controller
         );
     }
 
-    public function store(ProjectFormData $projectFormData): ApiResponseData
+    public function store(Request $request, ProjectFormData $projectFormData): ApiResponseData
     {
-        $project = $this->projectService->createProject($projectFormData);
+        $project = $this->projectService->createProject(
+            user: $request->user(),
+            formData: $projectFormData
+        );
 
         return ApiResponseData::success(
             data: ProjectData::from($project),
         );
     }
 
-    public function update(ProjectFormData $projectFormData, Project $project): ApiResponseData
-    {
-        $project = $this->projectService->updateProject($project, $projectFormData);
+    public function update(
+        Request $request,
+        Project $project,
+        ProjectFormData $projectFormData
+    ): ApiResponseData {
+        $project = $this->projectService->updateProject(
+            user: $request->user(),
+            project: $project,
+            formData: $projectFormData,
+        );
 
         return ApiResponseData::success(
             data: ProjectData::from($project),
@@ -45,7 +55,7 @@ class ProjectController extends Controller
 
     public function show(Request $request, Project $project): ApiResponseData
     {
-        $project = $this->projectService->getProject($project, $request->user());
+        $project = $this->projectService->getProject(project: $project, user: $request->user());
 
         return ApiResponseData::success(
             data: ProjectData::from($project),
@@ -54,7 +64,7 @@ class ProjectController extends Controller
 
     public function destroy(Request $request, Project $project): ApiResponseData
     {
-        $this->projectService->deleteProject($project, $request->user());
+        $this->projectService->deleteProject(project: $project, user: $request->user());
 
         return ApiResponseData::success();
     }
