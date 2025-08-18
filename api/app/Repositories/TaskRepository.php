@@ -28,6 +28,7 @@ class TaskRepository
     {
         return $this->model->create([
             'title' => $data->title,
+            'status' => $data->status,
             'description' => $data->description,
             'project_id' => $data->project_id,
         ]);
@@ -37,6 +38,7 @@ class TaskRepository
     {
         $task->update([
             'title' => $data->title,
+            'status' => $data->status,
             'description' => $data->description,
             'project_id' => $data->project_id,
         ]);

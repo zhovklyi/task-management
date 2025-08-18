@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Enums\TaskStatus;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Support\Carbon;
@@ -21,6 +22,11 @@ class Task extends Model
         'title',
         'description',
         'project_id',
+        'status',
+    ];
+
+    protected $casts = [
+        'status' => TaskStatus::class,
     ];
 
     /** @return BelongsTo<Project, Task> */
