@@ -1,8 +1,15 @@
-import MainLayout from "../layouts/main-layout"
+import type React from "react"
+import MainLayout from "@/layouts/main-layout"
 import useUserStore from "@/store/user-store"
-import type { FC } from "react"
+import {
+  PageHeader,
+  StatCard,
+  Card,
+  RecentTaskItem,
+  QuickActionButton
+} from "@/components"
 
-const Dashboard: FC = (): React.ReactElement => {
+const Dashboard: React.FC = (): React.ReactElement => {
   const { user } = useUserStore()
 
   // Safety check - ensure user has required data
@@ -20,10 +27,10 @@ const Dashboard: FC = (): React.ReactElement => {
   }
 
   const stats = [
-    { title: "Total Tasks", value: "24", change: "+12%", changeType: "increase", icon: "📋" },
-    { title: "Completed", value: "18", change: "+8%", changeType: "increase", icon: "✅" },
-    { title: "In Progress", value: "4", change: "-2%", changeType: "decrease", icon: "🔄" },
-    { title: "Overdue", value: "2", change: "+1", changeType: "increase", icon: "⚠️" }
+    { title: "Total Tasks", value: "24", change: "+12%", changeType: "increase" as const, icon: "📋" },
+    { title: "Completed", value: "18", change: "+8%", changeType: "increase" as const, icon: "✅" },
+    { title: "In Progress", value: "4", change: "-2%", changeType: "decrease" as const, icon: "🔄" },
+    { title: "Overdue", value: "2", change: "+1", changeType: "increase" as const, icon: "⚠️" }
   ]
 
   const recentTasks = [
@@ -40,103 +47,61 @@ const Dashboard: FC = (): React.ReactElement => {
     { title: "Reports", icon: "📊", action: "reports", color: "bg-orange-500 hover:bg-orange-600" }
   ]
 
-  const getStatusColor = (status: string): string => {
-    switch (status) {
-      case 'completed': return 'text-green-600 bg-green-100'
-      case 'in-progress': return 'text-blue-600 bg-blue-100'
-      case 'pending': return 'text-yellow-600 bg-yellow-100'
-      default: return 'text-gray-600 bg-gray-100'
-    }
-  }
-
-  const getPriorityColor = (priority: string): string => {
-    switch (priority) {
-      case 'high': return 'text-red-600 bg-red-100'
-      case 'medium': return 'text-yellow-600 bg-yellow-100'
-      case 'low': return 'text-green-600 bg-green-100'
-      default: return 'text-gray-600 bg-gray-100'
-    }
-  }
-
   return (
     <MainLayout>
       <div className="space-y-6">
-        <div className="bg-white rounded-lg shadow-sm p-6 border border-gray-200">
-          <h1 className="text-3xl font-bold text-gray-900 mb-2">
-            Welcome back, {user?.name}! 👋
-          </h1>
-          <p className="text-gray-600">Here's what's happening with your tasks today.</p>
-        </div>
+        <PageHeader
+          title={`Welcome back, ${user?.name}! 👋`}
+          description="Here's what's happening with your tasks today."
+        />
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
           {stats.map((stat, index) => (
-            <div key={index} className="bg-white rounded-lg shadow-sm p-6 border border-gray-200">
-              <div className="flex items-center justify-between">
-                <div>
-                  <p className="text-sm font-medium text-gray-600">{stat.title}</p>
-                  <p className="text-2xl font-bold text-gray-900">{stat.value}</p>
-                </div>
-                <div className="text-3xl">{stat.icon}</div>
-              </div>
-              <div className="mt-4">
-                <span className={`text-sm font-medium ${
-                  stat.changeType === 'increase' ? 'text-green-600' : 'text-red-600'
-                }`}>
-                  {stat.change}
-                </span>
-                <span className="text-sm text-gray-500 ml-1">from last week</span>
-              </div>
-            </div>
+            <StatCard
+              key={index}
+              title={stat.title}
+              value={stat.value}
+              change={stat.change}
+              changeType={stat.changeType}
+              icon={stat.icon}
+            />
           ))}
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-          <div className="lg:col-span-2 bg-white rounded-lg shadow-sm border border-gray-200">
-            <div className="p-6 border-b border-gray-200">
-              <h2 className="text-lg font-semibold text-gray-900">Recent Tasks</h2>
+          <Card className="lg:col-span-2 overflow-hidden">
+            <div className="p-4 border-b border-slate-200/60 bg-gradient-to-r from-slate-50 to-blue-50">
+              <h2 className="text-lg font-bold text-slate-800">Recent Tasks</h2>
             </div>
-            <div className="p-6">
-              <div className="space-y-4">
-                {recentTasks.map((task) => (
-                  <div key={task.id} className="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
-                    <div className="flex-1">
-                      <h3 className="font-medium text-gray-900">{task.title}</h3>
-                      <div className="flex items-center space-x-2 mt-1">
-                        <span className={`px-2 py-1 rounded-full text-xs font-medium ${getStatusColor(task.status)}`}>
-                          {task.status.replace('-', ' ')}
-                        </span>
-                        <span className={`px-2 py-1 rounded-full text-xs font-medium ${getPriorityColor(task.priority)}`}>
-                          {task.priority}
-                        </span>
-                      </div>
-                    </div>
-                    <div className="text-right">
-                      <p className="text-sm text-gray-500">Due: {task.dueDate}</p>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
-          </div>
 
-          <div className="bg-white rounded-lg shadow-sm border border-gray-200">
-            <div className="p-6 border-b border-gray-200">
-              <h2 className="text-lg font-semibold text-gray-900">Quick Actions</h2>
-            </div>
-            <div className="p-6">
+            <div className="p-4">
               <div className="space-y-3">
-                {quickActions.map((action, index) => (
-                  <button
-                    key={index}
-                    className={`w-full ${action.color} text-white font-medium py-3 px-4 rounded-lg transition-colors duration-200 flex items-center justify-center space-x-2`}
-                  >
-                    <span className="text-lg">{action.icon}</span>
-                    <span>{action.title}</span>
-                  </button>
+                {recentTasks.map((task) => (
+                  <RecentTaskItem
+                    key={task.id}
+                    title={task.title}
+                    dueDate={task.dueDate}
+                    status={task.status}
+                    priority={task.priority}
+                  />
                 ))}
               </div>
             </div>
-          </div>
+          </Card>
+
+          <Card>
+            <h2 className="text-lg font-bold text-slate-800 mb-4">Quick Actions</h2>
+            <div className="space-y-3">
+              {quickActions.map((action, index) => (
+                <QuickActionButton
+                  key={index}
+                  title={action.title}
+                  icon={action.icon}
+                  color={action.color}
+                />
+              ))}
+            </div>
+          </Card>
         </div>
       </div>
     </MainLayout>
