@@ -1,7 +1,7 @@
 import { useState } from "react"
 import { useNavigate } from "react-router-dom"
 import AuthLayout from "@/layouts/auth-layout"
-import FormGroup from "@/components/forms/FormGroup"
+import { FormGroup, Input } from "@/components"
 import useUserStore from "@/store/user-store"
 import { useRegisterMutation } from "@/hooks/queries/auth"
 import { setAuthorization } from "@/apis/config"
@@ -113,49 +113,49 @@ const Register: FC = (): React.ReactElement => {
             </div>
 
             <form onSubmit={handleSubmit} className="space-y-6">
-              <FormGroup
-                label="Full Name"
-                name="name"
-                type="text"
-                value={formData.name}
-                onChange={handleInputChange}
-                placeholder="Enter your full name"
-                required
-                {...(errors.name && { error: errors.name })}
-              />
+              <FormGroup label="Full Name" htmlFor="name" required error={errors.name}>
+                <Input
+                  id="name"
+                  name="name"
+                  type="text"
+                  value={formData.name}
+                  onChange={handleInputChange}
+                  placeholder="Enter your full name"
+                />
+              </FormGroup>
 
-              <FormGroup
-                label="Email Address"
-                name="email"
-                type="email"
-                value={formData.email}
-                onChange={handleInputChange}
-                placeholder="Enter your email"
-                required
-                {...(errors.email && { error: errors.email })}
-              />
+              <FormGroup label="Email Address" htmlFor="email" required error={errors.email}>
+                <Input
+                  id="email"
+                  name="email"
+                  type="email"
+                  value={formData.email}
+                  onChange={handleInputChange}
+                  placeholder="Enter your email"
+                />
+              </FormGroup>
 
-              <FormGroup
-                label="Password"
-                name="password"
-                type="password"
-                value={formData.password}
-                onChange={handleInputChange}
-                placeholder="Create a password"
-                required
-                {...(errors.password && { error: errors.password })}
-              />
+              <FormGroup label="Password" htmlFor="password" required error={errors.password}>
+                <Input
+                  id="password"
+                  name="password"
+                  type="password"
+                  value={formData.password}
+                  onChange={handleInputChange}
+                  placeholder="Create a password"
+                />
+              </FormGroup>
 
-              <FormGroup
-                label="Confirm Password"
-                name="passwordConfirmation"
-                type="password"
-                value={formData.passwordConfirmation}
-                onChange={handleInputChange}
-                placeholder="Confirm your password"
-                required
-                {...(errors.passwordConfirmation && { error: errors.passwordConfirmation })}
-              />
+              <FormGroup label="Confirm Password" htmlFor="passwordConfirmation" required error={errors.passwordConfirmation}>
+                <Input
+                  id="passwordConfirmation"
+                  name="passwordConfirmation"
+                  type="password"
+                  value={formData.passwordConfirmation}
+                  onChange={handleInputChange}
+                  placeholder="Confirm your password"
+                />
+              </FormGroup>
 
               <button
                 type="submit"

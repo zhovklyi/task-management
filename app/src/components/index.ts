@@ -5,6 +5,12 @@ export { default as Badge } from './ui/badge'
 export { default as PageHeader } from './ui/page-header'
 export { default as StatCard } from './ui/stat-card'
 
+// Form Components
+export { default as FormGroup } from './forms/FormGroup'
+export { default as Input } from './forms/input'
+export { default as Textarea } from './forms/textarea'
+export { default as Select } from './forms/select'
+
 // Dashboard Components
 export { default as QuickActionButton } from './dashboard/quick-action-button'
 export { default as RecentTaskItem } from './dashboard/recent-task-item'

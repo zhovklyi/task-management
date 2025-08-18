@@ -1,8 +1,11 @@
 import type React from "react"
+import { useNavigate } from "react-router-dom"
 import MainLayout from "@/layouts/main-layout"
 import { PageHeader, ProjectCard } from "@/components"
 
-const ProjectsPage: React.FC = (): React.ReactElement => {
+const ProjectsIndexPage: React.FC = (): React.ReactElement => {
+  const navigate = useNavigate()
+
   const projects = [
     {
       id: 1,
@@ -13,7 +16,7 @@ const ProjectsPage: React.FC = (): React.ReactElement => {
       completionPercentage: 75,
       icon: (
         <svg className="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
         </svg>
       ),
       iconBgColor: "bg-gradient-to-br from-emerald-500 to-teal-600"
@@ -49,8 +52,8 @@ const ProjectsPage: React.FC = (): React.ReactElement => {
   ]
 
   const handleNewProject = (): void => {
-    // @todo: Implement new project functionality
-    console.log('Create new project')
+    // Navigate to create project page
+    navigate('/projects/create')
   }
 
   return (
@@ -77,6 +80,7 @@ const ProjectsPage: React.FC = (): React.ReactElement => {
               completionPercentage={project.completionPercentage}
               icon={project.icon}
               iconBgColor={project.iconBgColor}
+              onClick={() => navigate(`/projects/${project.id}`)}
             />
           ))}
         </div>
@@ -85,4 +89,4 @@ const ProjectsPage: React.FC = (): React.ReactElement => {
   )
 }
 
-export default ProjectsPage
+export default ProjectsIndexPage

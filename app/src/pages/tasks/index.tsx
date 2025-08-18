@@ -1,8 +1,11 @@
 import type React from "react"
+import { useNavigate } from "react-router-dom"
 import MainLayout from "@/layouts/main-layout"
 import { PageHeader, TaskCard, TaskFilters } from "@/components"
 
-const TasksPage: React.FC = (): React.ReactElement => {
+const TasksIndexPage: React.FC = (): React.ReactElement => {
+  const navigate = useNavigate()
+
   const tasks = [
     {
       id: 1,
@@ -37,8 +40,8 @@ const TasksPage: React.FC = (): React.ReactElement => {
   ]
 
   const handleNewTask = (): void => {
-    // @todo: Implement new task functionality
-    console.log('Create new task')
+    // Navigate to create task page
+    navigate('/tasks/create')
   }
 
   const handleProjectChange = (value: string): void => {
@@ -86,6 +89,7 @@ const TasksPage: React.FC = (): React.ReactElement => {
               status={task.status}
               priority={task.priority}
               statusColor={task.statusColor}
+              onClick={() => navigate(`/tasks/${task.id}`)}
             />
           ))}
         </div>
@@ -94,4 +98,4 @@ const TasksPage: React.FC = (): React.ReactElement => {
   )
 }
 
-export default TasksPage
+export default TasksIndexPage

@@ -11,6 +11,7 @@ interface TaskCardProps {
   priority: string
   statusColor: string
   className?: string
+  onClick?: () => void
 }
 
 const TaskCard: React.FC<TaskCardProps> = ({
@@ -21,7 +22,8 @@ const TaskCard: React.FC<TaskCardProps> = ({
   status,
   priority,
   statusColor,
-  className = ""
+  className = "",
+  onClick
 }) => {
   const getStatusVariant = (status: string): 'success' | 'info' | 'warning' | 'default' => {
     switch (status.toLowerCase()) {
@@ -42,7 +44,7 @@ const TaskCard: React.FC<TaskCardProps> = ({
   }
 
   return (
-    <Card className={className}>
+    <Card className={className} onClick={onClick}>
       <div className="flex items-start justify-between">
         <div className="flex-1">
           <div className="flex items-center space-x-2 mb-2">

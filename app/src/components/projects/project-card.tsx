@@ -11,6 +11,7 @@ interface ProjectCardProps {
   icon: React.ReactNode
   iconBgColor: string
   className?: string
+  onClick?: () => void
 }
 
 const ProjectCard: React.FC<ProjectCardProps> = ({
@@ -21,7 +22,8 @@ const ProjectCard: React.FC<ProjectCardProps> = ({
   completionPercentage,
   icon,
   iconBgColor,
-  className = ""
+  className = "",
+  onClick
 }) => {
   const getStatusVariant = (status: string): 'success' | 'warning' | 'info' | 'default' => {
     switch (status.toLowerCase()) {
@@ -39,7 +41,7 @@ const ProjectCard: React.FC<ProjectCardProps> = ({
   }
 
   return (
-    <Card className={`group ${className}`}>
+    <Card className={`group ${className} ${onClick ? 'cursor-pointer hover:shadow-lg' : ''}`} onClick={onClick}>
       <div className="flex items-center justify-between mb-3">
         <div className={`w-8 h-8 ${iconBgColor} rounded-lg flex items-center justify-center shadow-md`}>
           {icon}

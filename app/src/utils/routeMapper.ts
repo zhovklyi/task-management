@@ -2,7 +2,7 @@ interface PageComponent {
   default: React.ComponentType
 }
 
-const pages = import.meta.glob('../pages/*.tsx', { eager: true })
+const pages = import.meta.glob('../pages/**/*.tsx', { eager: true })
 
 export const routes = Object.entries(pages)
   .map(([path, component]) => {
@@ -13,9 +13,19 @@ export const routes = Object.entries(pages)
 
     const Component = (component as PageComponent).default
 
-    return routeName === 'dashboard'
-      ? { path: '/', element: Component }
-      : { path: `/${routeName}`, element: Component }
+    if (routeName === 'dashboard') {
+      return { path: '/', element: Component }
+    }
+
+    let routePath = routeName
+      .replace('/index', '')
+      .replace('[id]', ':id')
+
+    if (!routePath.startsWith('/')) {
+      routePath = `/${routePath}`
+    }
+
+    return { path: routePath, element: Component }
   })
 
 export const allRoutes = [

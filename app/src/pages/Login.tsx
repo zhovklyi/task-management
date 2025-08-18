@@ -1,6 +1,6 @@
 import React, { useState } from "react"
 import AuthLayout from "@/layouts/auth-layout"
-import FormGroup from "@/components/forms/FormGroup"
+import { FormGroup, Input } from "@/components"
 import type { FC } from "react"
 import { useLoginMutation } from "@/hooks/queries/auth"
 import useUserStore from "@/store/user-store"
@@ -60,25 +60,27 @@ const Login: FC = (): React.ReactElement => {
             </div>
 
             <form onSubmit={handleSubmit} className="space-y-6">
-              <FormGroup
-                label="Email Address"
-                name="email"
-                type="email"
-                value={formData.email}
-                onChange={handleInputChange}
-                placeholder="Enter your email"
-                required
-              />
+              <FormGroup label="Email Address" htmlFor="email" required>
+                <Input
+                  id="email"
+                  name="email"
+                  type="email"
+                  value={formData.email}
+                  onChange={handleInputChange}
+                  placeholder="Enter your email"
+                />
+              </FormGroup>
 
-              <FormGroup
-                label="Password"
-                name="password"
-                type="password"
-                value={formData.password}
-                onChange={handleInputChange}
-                placeholder="Enter your password"
-                required
-              />
+              <FormGroup label="Password" htmlFor="password" required>
+                <Input
+                  id="password"
+                  name="password"
+                  type="password"
+                  value={formData.password}
+                  onChange={handleInputChange}
+                  placeholder="Enter your password"
+                />
+              </FormGroup>
 
               <div className="flex items-center justify-between">
                 <div className="flex items-center">
