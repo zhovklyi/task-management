@@ -3,8 +3,9 @@
 namespace App\Models;
 
 use App\Enums\TaskStatus;
+use App\Models\Traits\Relations\TaskRelations;
+use App\Models\Traits\Scopes\TaskScopes;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Support\Carbon;
 
 /**
@@ -17,6 +18,8 @@ use Illuminate\Support\Carbon;
  */
 class Task extends Model
 {
+    use TaskRelations, TaskScopes;
+
     /** @var list<string> */
     protected $fillable = [
         'title',
@@ -28,11 +31,4 @@ class Task extends Model
     protected $casts = [
         'status' => TaskStatus::class,
     ];
-
-    /** @return BelongsTo<Project, Task> */
-    public function project(): BelongsTo
-    {
-        /** @var BelongsTo<Project, Task> */
-        return $this->belongsTo(Project::class);
-    }
 }

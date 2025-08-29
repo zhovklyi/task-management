@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\OverviewController;
 use App\Http\Controllers\ProjectController;
 use App\Http\Controllers\TaskController;
 use Illuminate\Support\Facades\Route;
@@ -27,4 +28,9 @@ Route::middleware('auth:sanctum')->group(function () {
         'projects' => ProjectController::class,
         'tasks' => TaskController::class,
     ]);
+
+    Route::prefix('overview')
+        ->group(function () {
+            Route::get('/', [OverviewController::class, 'index']);
+        });
 });

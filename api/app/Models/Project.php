@@ -2,8 +2,8 @@
 
 namespace App\Models;
 
+use App\Models\Traits\Relations\ProjectRelations;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Support\Carbon;
 
 /**
@@ -15,6 +15,8 @@ use Illuminate\Support\Carbon;
  */
 class Project extends Model
 {
+    use ProjectRelations;
+
     /** @var list<string> */
     protected $fillable = [
         'name',
@@ -25,11 +27,4 @@ class Project extends Model
         'created_at' => 'datetime',
         'updated_at' => 'datetime',
     ];
-
-    /** @return BelongsTo<User, Project> */
-    public function user(): BelongsTo
-    {
-        /** @var BelongsTo<User, Project> */
-        return $this->belongsTo(User::class);
-    }
 }
