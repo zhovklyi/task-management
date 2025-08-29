@@ -5,7 +5,6 @@ namespace App\Repositories;
 use App\Data\Task\TaskFormData;
 use App\Models\Task;
 use App\Models\User;
-use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 
 class TaskRepository
@@ -16,12 +15,7 @@ class TaskRepository
 
     public function getTasksByUser(User $user): Collection
     {
-        return $this->model->whereHas(
-            'project',
-            function (Builder $query) use ($user) {
-                $query->where('user_id', $user->id);
-            }
-        )->get();
+        return $this->model->forUser($user)->get();
     }
 
     public function create(TaskFormData $data): Task
@@ -31,6 +25,7 @@ class TaskRepository
             'status' => $data->status,
             'description' => $data->description,
             'project_id' => $data->project_id,
+            'priority' => $data->priority,
         ]);
     }
 
@@ -41,6 +36,7 @@ class TaskRepository
             'status' => $data->status,
             'description' => $data->description,
             'project_id' => $data->project_id,
+            'priority' => $data->priority,
         ]);
 
         return $task;

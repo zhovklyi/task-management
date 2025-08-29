@@ -2,6 +2,7 @@
 
 namespace App\Data\Task;
 
+use App\Enums\TaskPriority;
 use App\Enums\TaskStatus;
 use Spatie\LaravelData\Attributes\WithCast;
 use Spatie\LaravelData\Casts\EnumCast;
@@ -15,6 +16,8 @@ class TaskFormData extends Data
         public int $project_id,
         #[WithCast(EnumCast::class)]
         public TaskStatus $status,
+        #[WithCast(EnumCast::class)]
+        public TaskPriority $priority,
     ) {}
 
     public static function rules(): array
@@ -24,6 +27,7 @@ class TaskFormData extends Data
             'description' => ['nullable', 'string', 'max:1000'],
             'project_id' => ['required', 'integer', 'exists:projects,id'],
             'status' => ['required', 'string', 'in:' . implode(',', array_column(TaskStatus::cases(), 'value'))],
+            'priority' => ['required', 'string', 'in:' . implode(',', array_column(TaskPriority::cases(), 'value'))],
         ];
     }
 
@@ -41,6 +45,9 @@ class TaskFormData extends Data
             'status.required' => 'Status is required',
             'status.string' => 'Status must be a string',
             'status.in' => 'Status must be one of: open, in-progress, done',
+            'priority.required' => 'Priority is required',
+            'priority.string' => 'Priority must be a string',
+            'priority.in' => 'Priority must be one of: low, medium, high, urgent',
         ];
     }
 }
